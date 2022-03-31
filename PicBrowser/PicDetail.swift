@@ -1,6 +1,6 @@
 //
 //  PicDetail.swift
-//  PicsBrowser
+//  PicBrowser
 //
 //  Created by Marcus Mao on 2/28/22.
 //

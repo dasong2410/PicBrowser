@@ -1,6 +1,6 @@
 //
 //  WebsiteList.swift
-//  PicsBrowser
+//  PicBrowser
 //
 //  Created by Marcus Mao on 3/2/22.
 //
@@ -33,10 +33,31 @@ struct WebsiteList: View {
                     NavigationLink(destination: NavigationLazyView(PostListView(website: w))) {
                         Text(w.name)
                     }
+                    .swipeActions(allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            print("Deleting website configuration")
+                        } label: {
+                            Label("Delete", systemImage: "trash.fill")
+                        }
+                    }
+                    .swipeActions(allowsFullSwipe: false) {
+                        Button {
+                            print("Modifying website configuration")
+                        } label: {
+                            Label("Modify", systemImage: "pencil")
+                        }
+                    }
                 }
             }
-            .navigationTitle("Website List")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Websites")
+//            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
         }
     }
 }

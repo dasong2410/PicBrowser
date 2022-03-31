@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  PicsBrowser
+//  PicBrowser
 //
 //  Created by Marcus Mao on 2/28/22.
 //
@@ -13,15 +13,13 @@ struct ContentView: View {
         TabView{
             WebsiteList()
                 .tabItem{
-                    Label("List", systemImage: "list.dash")
+//                    Label("List", systemImage: "list.dash")
+                    Image(systemName: "list.dash")
                 }
-//            PostListView()
-//                .tabItem{
-//                    Label("Post List", systemImage: "list.dash")
-//                }
-            Favorite()
+            Settings()
                 .tabItem{
-                    Label("Fav", systemImage: "star")
+//                    Label("Fav", systemImage: "star")
+                    Image(systemName: "gear")
                 }
         }
         // https://stackoverflow.com/questions/69309689/ios-15-swiftui-tabview-tab-bar-appearance-doesnt-update-between-views

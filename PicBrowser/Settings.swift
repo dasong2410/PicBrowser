@@ -17,6 +17,9 @@ struct Settings: View {
                     Section{
                         Toggle("Dark Mode", isOn: $isDarkMode)
                         
+//                        NavigationLink(destination: NavigationLazyView(Favs().navigationTitle("My Favorites").navigationBarTitleDisplayMode(.inline))) {
+//                            Text("Favorites")
+//                        }
                         NavigationLink{
                             Favs()
                                 .navigationTitle("My Favorites")

@@ -7,10 +7,21 @@
 
 import SwiftUI
 import SwiftSoup
+import CoreData
 
 struct PicGallery: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+    let persistenceController = PersistenceController.shared
+    
+    @FetchRequest(
+        entity: PostsEntity.entity(),
+        sortDescriptors: []
+    ) var favPosts: FetchedResults<PostsEntity>
+    
     var url: String
     var title: String
+    
+    @State var isLiked: Bool = false
     
     var body: some View {
         let pics:[String] = extractPicSrcs(url: url)
@@ -31,44 +42,90 @@ struct PicGallery: View {
                         NavigationLink {
                             PicDetail(picName: pics[i], pics: pics, idx: i)
                         } label: {
-//                            AsyncImage(url: URL(string: pics[i])) { image in
-//                                image.resizable()
-//                            } placeholder: {
-//                                ProgressView()
+//                            AsyncImage(
+//                                url: URL(string: pics[i]),
+//                                transaction: Transaction(animation: .easeInOut)
+//                            ) { phase in
+//                                switch phase {
+//                                case .empty:
+//                                    ProgressView()
+//                                case .success(let image):
+//                                    image
+//                                        .resizable()
+//                                        .transition(.scale(scale: 0.1, anchor: .center))
+//                                case .failure:
+//                                    Image("PicNotFound")
+//                                        .resizable()
+//                                        .border(Color.gray, width: 0.5)
+//                                @unknown default:
+//                                    EmptyView()
+//                                }
 //                            }
-////                            .aspectRatio(1, contentMode: .fill)
 //                            .scaledToFill()
 //                            .frame(width: w, height: h)
 //                            .clipped()
                             
-                            AsyncImage(
-                                url: URL(string: pics[i]),
-                                transaction: Transaction(animation: .easeInOut)
-                            ) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .transition(.scale(scale: 0.1, anchor: .center))
-                                case .failure:
-                                    Image("PicNotFound")
-                                        .resizable()
-                                        .border(Color.gray, width: 0.5)
-                                @unknown default:
-                                    EmptyView()
-                                }
-                            }
-                            .scaledToFill()
-                            .frame(width: w, height: h)
-                            .clipped()
+                            ImageLoadingView(url: pics[i], w: w, h: h)
                         }
+                    }
+                }
+                .onAppear() {
+                    URLCache.shared.memoryCapacity = 1024 * 1024 * 300
+                    print("Cache size: \(URLCache.shared.memoryCapacity/1024)KB")
+                    
+                    if (favPosts.contains { p in
+                        p.url == self.url
+                    }) {
+                        isLiked = true
                     }
                 }
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Button{
+                    if isLiked {
+                        do {
+                            // Create a fetch request with a string filter
+                            // for an entity’s name
+                            let fetchRequest: NSFetchRequest<PostsEntity> = PostsEntity.fetchRequest()
+                            
+                            fetchRequest.predicate = NSPredicate(
+                                format: "url LIKE %@", url
+                            )
+                            
+                            // Perform the fetch request to get the objects
+                            // matching the predicate
+                            let objects = try managedObjectContext.fetch(fetchRequest)
+                            var cnt = objects.count
+                            for i in (0..<cnt) {
+                                var p = objects[i]
+                                managedObjectContext.delete(p)
+                            }
+                        } catch {
+                            // handle the Core Data error
+                        }
+                    } else {
+                        let post = PostsEntity(context: managedObjectContext)
+                        post.title = title
+                        post.url = url
+                        
+                        do {
+                            try managedObjectContext.save()
+                        } catch {
+                            // handle the Core Data error
+                        }
+                    }
+                    
+                    isLiked.toggle()
+                } label: {
+                    if isLiked {
+                        Image(systemName: "heart.fill").foregroundColor(Color.red)
+                    } else {
+                        Image(systemName: "heart").foregroundColor(Color.red)
+                    }
+                }
+            }
         }
         
     }

@@ -7,15 +7,38 @@
 
 import SwiftUI
 import SwiftSoup
+import CoreData
 
 struct PostListView: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
     var website: Website
     @ObservedObject private var posts: PostList
+    @State var favPosts: [PostsEntity]?
+    
+    @FetchRequest(
+        entity: PostsEntity.entity(),
+        sortDescriptors: []
+    ) var dbPosts: FetchedResults<PostsEntity>
     
     init(website: Website){
         self.website = website
         self.posts = PostList(website: self.website)
         self.posts.extractPosts()
+        
+//        favPosts = loadQuestion()
+    }
+    
+    func loadQuestion() -> [PostsEntity]? {
+        let fetchRequest: NSFetchRequest<PostsEntity> = PostsEntity.fetchRequest()
+
+        do {
+            let array = try managedObjectContext.fetch(fetchRequest) as [PostsEntity]
+            return array
+        } catch let errore {
+            print("error FetchRequest \(errore)")
+        }
+
+        return nil
     }
     
     var body: some View {

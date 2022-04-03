@@ -25,6 +25,9 @@ struct PicDetail: View {
     @GestureState private var fingerLocation: CGPoint? = nil
     @GestureState private var startLocation: CGPoint? = nil // 1
     
+    @State var items: [Any] = []
+    @State var sheet: Bool = false
+    
     var body: some View {
         VStack{
             AsyncImage(url: URL(string: picName)) { image in
@@ -34,7 +37,6 @@ struct PicDetail: View {
             }
             .aspectRatio(contentMode: .fit)
             .scaleEffect(scale)
-//            .position(location)
             .offset(dragOffset)
             .gesture(
                 MagnificationGesture()
@@ -45,11 +47,6 @@ struct PicDetail: View {
                         if scale<1 {
                             scale = 1
                         }
-                        //                scale = val
-                        
-                        //... anything else e.g. clamping the newScale
-                        
-                        
                     }
                     .onEnded { val in
                         // without this the next gesture will be broken
@@ -99,6 +96,43 @@ struct PicDetail: View {
                 dragOffset = .zero
             }
         }
+        .toolbar {
+            Button{
+//                items.removeAll()
+//                if let data = try? Data(contentsOf: URL(string: picName)!) {
+//                    if let image = UIImage(data: data) {
+//                        items.append(image)
+//                    }
+//                }
+                
+//                items.append(Image(picName))
+                sheet.toggle()
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+            }
+        }
+        .sheet(isPresented: $sheet) {
+            if let data = try? Data(contentsOf: URL(string: picName)!) {
+                if let image = UIImage(data: data) {
+                    ShareSheet(items: [image])
+                }
+            }
+            
+        }
+    }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        
     }
 }
 

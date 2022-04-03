@@ -11,6 +11,7 @@ import CoreData
 struct Favs: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     let persistenceController = PersistenceController.shared
+//    @State var isPresented: Bool = false
     
     //    @FetchRequest(
     //        entity: PostsEntity.entity(),
@@ -36,16 +37,17 @@ struct Favs: View {
                     } label: {
                         Text(title)
                     }
-                    //                        .swipeActions(allowsFullSwipe: false) {
-                    //                            Button(role: .destructive) {
-                    //                                print("Deleting conversation")
-                    //                            } label: {
-                    //                                Label("Delete", systemImage: "trash.fill")
-                    //                            }
-                    //                        }
+                    .swipeActions(allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            print("Deleting conversation")
+                            PersistenceController.shared.delete(p)
+                        } label: {
+                            Label("Delete", systemImage: "trash.fill")
+                        }
+                    }
                 }
             }
-            .onDelete(perform: deleteFavPost)
+//            .onDelete(perform: deleteFavPost)
             
             //            Text("Count: \(posts[0].postTitle!)")
             //                let indices = posts.indices
@@ -91,6 +93,18 @@ struct Favs: View {
             //            var cnt = posts.count
             //            print(cnt)
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                NavigationLink {
+                    PostFavAddView()
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+//        .sheet(isPresented: $isPresented) {
+//            PostFavAddView()
+//        }
     }
     
     func deleteFavPost(at offsets: IndexSet) {

@@ -3,13 +3,14 @@
     <entity name="PostsEntity" representedClassName="PostsEntity" syncable="YES" codeGenerationType="class">
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="websiteUrl" optional="YES" attributeType="String"/>
     </entity>
     <entity name="ProgrammingLanguage" representedClassName="ProgrammingLanguage" syncable="YES" codeGenerationType="class">
         <attribute name="creator" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="PostsEntity" positionX="-63" positionY="0" width="128" height="59"/>
+        <element name="PostsEntity" positionX="-63" positionY="0" width="128" height="74"/>
         <element name="ProgrammingLanguage" positionX="-63" positionY="-18" width="128" height="59"/>
     </elements>
 </model>

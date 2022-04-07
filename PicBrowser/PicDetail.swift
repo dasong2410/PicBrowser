@@ -25,15 +25,25 @@ struct PicDetail: View {
     @GestureState private var fingerLocation: CGPoint? = nil
     @GestureState private var startLocation: CGPoint? = nil // 1
     
-    @State var items: [Any] = []
+//    @State var items: [Any] = []
     @State var sheet: Bool = false
     
     var body: some View {
         VStack{
-            AsyncImage(url: URL(string: picName)) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
+            AsyncImage(url: URL(string: picName)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image
+                        .resizable()
+                case .failure:
+                    Image("PicNotFound")
+                        .resizable()
+                        .border(Color.gray, width: 0.5)
+                @unknown default:
+                    EmptyView()
+                }
             }
             .aspectRatio(contentMode: .fit)
             .scaleEffect(scale)
@@ -98,14 +108,6 @@ struct PicDetail: View {
         }
         .toolbar {
             Button{
-//                items.removeAll()
-//                if let data = try? Data(contentsOf: URL(string: picName)!) {
-//                    if let image = UIImage(data: data) {
-//                        items.append(image)
-//                    }
-//                }
-                
-//                items.append(Image(picName))
                 sheet.toggle()
             } label: {
                 Image(systemName: "square.and.arrow.up")
@@ -117,7 +119,6 @@ struct PicDetail: View {
                     ShareSheet(items: [image])
                 }
             }
-            
         }
     }
 }

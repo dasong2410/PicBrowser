@@ -18,13 +18,14 @@ struct PicGallery: View {
         sortDescriptors: []
     ) var favPosts: FetchedResults<PostsEntity>
     
+    var website: Website
     var url: String
     var title: String
     
     @State var isLiked: Bool = false
     
     var body: some View {
-        let pics:[String] = extractPicSrcs(url: url)
+        let pics:[String] = extractPicSrcs(website: website, url: url)
         
         let columns = [
                GridItem(.flexible()),
@@ -97,9 +98,9 @@ struct PicGallery: View {
                             // Perform the fetch request to get the objects
                             // matching the predicate
                             let objects = try managedObjectContext.fetch(fetchRequest)
-                            var cnt = objects.count
+                            let cnt = objects.count
                             for i in (0..<cnt) {
-                                var p = objects[i]
+                                let p = objects[i]
                                 managedObjectContext.delete(p)
                             }
                         } catch {
@@ -107,6 +108,7 @@ struct PicGallery: View {
                         }
                     } else {
                         let post = PostsEntity(context: managedObjectContext)
+                        post.websiteUrl = website.url
                         post.title = title
                         post.url = url
                         
@@ -131,31 +133,40 @@ struct PicGallery: View {
     }
 }
 
-func extractPicSrcs(url: String) -> [String]{
+func extractPicSrcs(website: Website, url: String) -> [String]{
     var imgArray: [String] = []
     
     if let url = URL(string: url) {
         do {
-            let contents = try String(contentsOf: url)
+            let contents = try String(contentsOf: url, encoding: website.postEncoding)
 //            print(contents)
             
             do {
                 let doc: Document = try SwiftSoup.parse(contents)
-                let imgs: Elements = try doc.select("img")
-                for img in imgs{
-                    var src = try img.attr("ess-data")
-                    if src==""{
-                        src = try img.attr("data-src")
-                        
-                        if src==""{
-                            continue
-                        }
-                        
-                        src = "https:" + src
+                //                let imgs: Elements = try doc.select("img")
+                let imgs: Elements = try doc.select(website.imgTag)
+                for img in imgs {
+                    print("Tag info: \(img)")
+                    
+                    var src = try img.attr(website.imgAttr)
+                    let txt = try img.text()
+                    
+//                    if src.isEmpty || !txt.isEmpty {
+//                        continue
+//                    } else if !src.starts(with: "http") {
+//                        src = "http:" + src
+//                    }
+                    
+                    if src.isEmpty || !txt.isEmpty {
+                        continue
+                    } else {
+                        src = website.imgPrefix + src
                     }
-                    print(src)
+                    
+                    print("Image src: \(src)")
                     imgArray.append(src)
                 }
+                
                 return imgArray
             } catch Exception.Error(_, let message) {
                 print(message)
@@ -166,9 +177,11 @@ func extractPicSrcs(url: String) -> [String]{
             return imgArray
         } catch {
             // contents could not be loaded
+            print(error)
         }
     } else {
         // the URL was bad!
+        
     }
     
     return imgArray
@@ -176,6 +189,7 @@ func extractPicSrcs(url: String) -> [String]{
 
 struct PicGallry_Previews: PreviewProvider {
     static var previews: some View {
-        PicGallery(url: "https://www.t66y.com/htm_data/2202/7/4930114.html", title: "Test")
+        var website = Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", listEncoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "ess-data", imgPrefix: "")
+        PicGallery(website: website, url: "https://www.t66y.com/htm_data/2202/7/4930114.html", title: "Test")
     }
 }

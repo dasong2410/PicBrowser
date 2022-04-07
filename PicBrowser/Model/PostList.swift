@@ -20,16 +20,18 @@ class PostList: ObservableObject{
     
     func extractPosts() {
         posts.removeAll()
-        let urlWithPgNo = website.url + "\(currPageNo)"
+//        let urlWithPgNo = website.url + "\(currPageNo)"
+        let urlWithPgNo = String(format: website.url, String(currPageNo))
+        
         if let url = URL(string: urlWithPgNo) {
             do {
-                let contents = try String(contentsOf: url, encoding: website.encoding)
+                let contents = try String(contentsOf: url, encoding: website.listEncoding)
                 //                    print(contents)
                 
                 do {
                     let doc: Document = try SwiftSoup.parse(contents)
                     let postInfo: Elements = try doc.select("a")
-                    for h in postInfo{
+                    for h in postInfo {
                         var src = try h.attr("href")
                         if src.starts(with: website.startWith) {
                             src = website.prefix + src
@@ -39,6 +41,13 @@ class PostList: ObservableObject{
                                 title = try h.text()
                             } else if website.title=="title" {
                                 title = try h.attr("title")
+                            } else if website.title=="img" {
+                                title = ""
+                                let imgs = try h.getElementsByTag("img")
+                                if imgs.count>0 {
+                                    title = try imgs.attr("title")
+                                }
+//                                print("Test \(title)")
                             } else {
                                 continue
                             }

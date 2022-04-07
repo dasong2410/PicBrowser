@@ -29,23 +29,32 @@ struct Favs: View {
     //    ]
     
     var body: some View {
-        List {
-            ForEach(posts, id: \.url){ p in
-                if let url = p.url, let title = p.title {
-                    NavigationLink {
-                        PicGallery(url: url, title: title)
-                    } label: {
-                        Text(title)
-                    }
-                    .swipeActions(allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            print("Deleting conversation")
-                            PersistenceController.shared.delete(p)
-                        } label: {
-                            Label("Delete", systemImage: "trash.fill")
+//        List {
+            List(posts, id: \.self) { p in
+                if let websiteUrl = p.websiteUrl {
+                    let websites: [Website] = websiteList.filter { $0.url == websiteUrl }
+                    
+                    if websites.count>0 {
+                        if let url = p.url, let title = p.title {
+                            
+                            let website = websites[0]
+                            NavigationLink {
+                                PicGallery(website: website, url: url, title: title)
+                            } label: {
+                                Text(title)
+                            }
+                            .swipeActions(allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    print("Deleting conversation")
+                                    PersistenceController.shared.delete(p)
+                                } label: {
+                                    Label("Delete", systemImage: "trash.fill")
+                                }
+                            }
                         }
                     }
                 }
+                
             }
 //            .onDelete(perform: deleteFavPost)
             
@@ -71,7 +80,7 @@ struct Favs: View {
             //                    }
             //
             //                }
-        }
+//        }
         .onAppear() {
             do {
                 // Create a fetch request with a string filter

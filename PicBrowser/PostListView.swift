@@ -11,34 +11,13 @@ import CoreData
 
 struct PostListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @ObservedObject private var postList: PostList
     var website: Website
-    @ObservedObject private var posts: PostList
-    @State var favPosts: [PostsEntity]?
-    
-    @FetchRequest(
-        entity: PostsEntity.entity(),
-        sortDescriptors: []
-    ) var dbPosts: FetchedResults<PostsEntity>
     
     init(website: Website){
         self.website = website
-        self.posts = PostList(website: self.website)
-        self.posts.extractPosts()
-        
-//        favPosts = loadQuestion()
-    }
-    
-    func loadQuestion() -> [PostsEntity]? {
-        let fetchRequest: NSFetchRequest<PostsEntity> = PostsEntity.fetchRequest()
-
-        do {
-            let array = try managedObjectContext.fetch(fetchRequest) as [PostsEntity]
-            return array
-        } catch let errore {
-            print("error FetchRequest \(errore)")
-        }
-
-        return nil
+        self.postList = PostList(website: self.website)
+        self.postList.extractPosts()
     }
     
     var body: some View {
@@ -46,9 +25,9 @@ struct PostListView: View {
             ScrollViewReader{ proxy in
                 HStack{
                     Button {
-                        if posts.currPageNo>1{
-                            posts.currPageNo -= 1
-                            posts.extractPosts()
+                        if postList.currPageNo>1{
+                            postList.currPageNo -= 1
+                            postList.extractPosts()
                             proxy.scrollTo(0, anchor: .bottom)
                         }
                     } label: {
@@ -57,12 +36,12 @@ struct PostListView: View {
                     .buttonStyle(.bordered)
                     
                     Spacer()
-                    Text("Page: \(posts.currPageNo)")
+                    Text("Page: \(postList.currPageNo)")
                     Spacer()
                     
                     Button {
-                        posts.currPageNo += 1
-                        posts.extractPosts()
+                        postList.currPageNo += 1
+                        postList.extractPosts()
                         proxy.scrollTo(0, anchor: .bottom)
                     } label: {
                         Image(systemName: "arrow.right")
@@ -80,22 +59,25 @@ struct PostListView: View {
 //                    }
                     
                     // out of index if not define this var
-                    let indices = posts.posts.indices
-//                    var cnt = indices.count
+                    let indices = postList.posts.indices
+                    var cnt = indices.count
                     ForEach(indices) { i in
-                        let item = posts.posts[i]
-                        NavigationLink {
-                            PicGallery(url: item.src, title: item.title)
-                        } label: {
-                            Text(item.title)
+                        if i<cnt {
+                            let item = postList.posts[i]
+                            NavigationLink {
+                                PicGallery(website: website, url: item.src, title: item.title)
+                            } label: {
+                                Text(item.title)
+                            }
+                            .id(i)
                         }
-                        .id(i)
                     }
                 }
                 .navigationTitle(website.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .refreshable {
                     print("Refresh list")
+                    self.postList.extractPosts()
                 }
             }
         }
@@ -104,6 +86,6 @@ struct PostListView: View {
 
 struct ArtList_Previews: PreviewProvider {
     static var previews: some View {
-        PostListView(website: Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", encoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text"))
+        PostListView(website: Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", listEncoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "ess-data", imgPrefix: ""))
     }
 }

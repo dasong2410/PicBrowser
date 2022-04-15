@@ -11,7 +11,8 @@ import SwiftSoup
 @MainActor
 class PostList: ObservableObject{
     @Published var currPageNo: Int = 1
-    @Published var posts: [(title: String, src: String)]=[]
+//    @Published var posts: [(title: String, src: String)]=[]
+    @Published var posts: [PostInfo]=[]
     var website: Website
     
     init(website: Website){
@@ -19,6 +20,7 @@ class PostList: ObservableObject{
     }
     
     func extractPosts() {
+        var idx: Int = 0
         posts.removeAll()
 //        let urlWithPgNo = website.url + "\(currPageNo)"
         let urlWithPgNo = String(format: website.url, String(currPageNo))
@@ -56,8 +58,10 @@ class PostList: ObservableObject{
                                 continue
                             }
                             
-                            if !posts.contains(where: {$0.src == src}) {
-                                posts.append((title, src))
+                            if !posts.contains(where: {$0.url == src}) {
+//                                posts.append((title, src))
+                                posts.append(PostInfo(id: idx, title: title, url: src))
+                                idx += 1
                             }
                             
                             print(title + " -> " + src)

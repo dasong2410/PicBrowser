@@ -50,27 +50,13 @@ struct PostListView: View {
                 }.padding(5)
                 
                 List{
-//                    ForEach(posts.posts, id: \.src){ item in
-//                        NavigationLink {
-//                            PicGallery(url: item.src, title: item.title)
-//                        } label: {
-//                            Text(item.title)
-//                        }
-//                    }
-                    
-                    // out of index if not define this var
-                    let indices = postList.posts.indices
-                    var cnt = indices.count
-                    ForEach(indices) { i in
-                        if i<cnt {
-                            let item = postList.posts[i]
-                            NavigationLink {
-                                PicGallery(website: website, url: item.src, title: item.title)
-                            } label: {
-                                Text(item.title)
-                            }
-                            .id(i)
+                    ForEach(postList.posts, id: \.url){ item in
+                        NavigationLink {
+                            PicGallery2(website: website, url: item.url, title: item.title)
+                        } label: {
+                            Text(item.title)
                         }
+                        .id(item.id)
                     }
                 }
                 .navigationTitle(website.name)

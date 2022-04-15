@@ -9,32 +9,27 @@ import SwiftUI
 
 struct Settings: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
+    @EnvironmentObject var homeData: HomeViewModel
     
     var body: some View {
-        VStack{
             NavigationView{
-                List{
-                    Section{
-                        Toggle("Dark Mode", isOn: $isDarkMode)
-                        
-//                        NavigationLink(destination: NavigationLazyView(Favs().navigationTitle("My Favorites").navigationBarTitleDisplayMode(.inline))) {
-//                            Text("Favorites")
-//                        }
-                        NavigationLink{
-                            Favs()
-                                .navigationTitle("My Favorites")
-                                .navigationBarTitleDisplayMode(.inline)
-                        } label: {
-                            Text("Favorites")
-                        }
+                List {
+                    Toggle("Dark Mode", isOn: $isDarkMode)
+                    
+//                    NavigationLink(destination: NavigationLazyView(Favs().navigationTitle("My Favorites").navigationBarTitleDisplayMode(.inline))) {
+//                        Text("Favorites")
+//                    }
+                    NavigationLink{
+                        Favs()
+                            .navigationTitle("Favorites")
+                            .navigationBarTitleDisplayMode(.inline)
+                    } label: {
+                        Text("Favorites")
                     }
                 }
                 .navigationTitle("Settings")
-//                .navigationBarTitleDisplayMode(.inline)
+                //                .navigationBarTitleDisplayMode(.inline)
             }
-            
-            Spacer()
-        }
     }
 }
 

@@ -29,7 +29,8 @@ struct PicDetail: View {
     @State var sheet: Bool = false
     
     var body: some View {
-        VStack{
+//        GeometryReader{ geo in
+            VStack {
             AsyncImage(url: URL(string: picName)) { phase in
                 switch phase {
                 case .empty:
@@ -45,6 +46,8 @@ struct PicDetail: View {
                     EmptyView()
                 }
             }
+//                Spacer()
+//            ImageLoadingView(url: picName, w: geo.size.width, h: geo.size.height)
             .aspectRatio(contentMode: .fit)
             .scaleEffect(scale)
             .offset(dragOffset)
@@ -105,6 +108,8 @@ struct PicDetail: View {
                 scale = 1
                 dragOffset = .zero
             }
+                
+//                Spacer()
         }
         .toolbar {
             Button{
@@ -120,7 +125,11 @@ struct PicDetail: View {
                 }
             }
         }
+            
+           
     }
+        
+//    }
 }
 
 struct ShareSheet: UIViewControllerRepresentable {

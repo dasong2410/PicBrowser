@@ -66,7 +66,9 @@ struct PicGallery: View {
 //                            .frame(width: w, height: h)
 //                            .clipped()
                             
-                            ImageLoadingView(url: pics[i], w: w, h: h)
+                            ImageLoadingView(url: pics[i])
+                                .frame(width: w, height: h)
+                                .clipped()
                         }
                     }
                 }

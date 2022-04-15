@@ -9,11 +9,10 @@ import Foundation
 
 extension String.Encoding {
     static let gb_18030_2000 = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(CFStringEncodings.GB_18030_2000.rawValue)))
-    
-    static let gb_gbk_95 = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(CFStringEncodings.EUC_CN.rawValue)))
 }
 
 struct PostInfo{
+    var id: Int
     var title: String
     var url: String
 }
@@ -39,14 +38,14 @@ let websiteList: [Website] = [
     Website(name: "汽车之家-媳妇当车模", url: "https://club.autohome.com.cn/JingXuan/104/%@", listEncoding: .gb_18030_2000, startWith: "//club.autohome.com.cn", prefix: "https:", title: "title", postEncoding: .utf8, imgTag: "img", imgAttr: "data-src", imgPrefix: "https:"),
     Website(name: "汽车之家-美人生活秀", url: "https://club.autohome.com.cn/JingXuan/292/%@", listEncoding: .gb_18030_2000, startWith: "//club.autohome.com.cn", prefix: "https:", title: "title", postEncoding: .utf8, imgTag: "img", imgAttr: "data-src", imgPrefix: "https:"),
     Website(name: "汽车之家-爱情连连看", url: "https://club.autohome.com.cn/JingXuan/282/%@", listEncoding: .gb_18030_2000, startWith: "//club.autohome.com.cn", prefix: "https:", title: "title", postEncoding: .utf8, imgTag: "img", imgAttr: "data-src", imgPrefix: "https:"),
-    
+
     Website(name: "丽丝库-秀人网", url: "https://www.lisiku1.com/forum-117-%@.html", listEncoding: .gb_18030_2000, startWith: "thread", prefix: "https://www.lisiku1.com/", title: "img", postEncoding: .gb_18030_2000, imgTag: "img", imgAttr: "src", imgPrefix: "https://www.lisiku1.com/"),
     Website(name: "丽丝库-魅妍社MiStar", url: "https://www.lisiku1.com/forum-126-%@.html", listEncoding: .gb_18030_2000, startWith: "thread", prefix: "https://www.lisiku1.com/", title: "img", postEncoding: .gb_18030_2000, imgTag: "img", imgAttr: "src", imgPrefix: "https://www.lisiku1.com/"),
     Website(name: "丽丝库-推女神TGo", url: "https://www.lisiku1.com/forum-138-%@.html", listEncoding: .gb_18030_2000, startWith: "thread", prefix: "https://www.lisiku1.com/", title: "img", postEncoding: .gb_18030_2000, imgTag: "img", imgAttr: "src", imgPrefix: "https://www.lisiku1.com/"),
     Website(name: "丽丝库-青豆客QingDouKe", url: "https://www.lisiku1.com/forum-139-%@.html", listEncoding: .gb_18030_2000, startWith: "thread", prefix: "https://www.lisiku1.com/", title: "img", postEncoding: .gb_18030_2000, imgTag: "img", imgAttr: "src", imgPrefix: "https://www.lisiku1.com/"),
     Website(name: "丽丝库-爱尤物UGirlsApp", url: "https://www.lisiku1.com/forum-140-%@.html", listEncoding: .gb_18030_2000, startWith: "thread", prefix: "https://www.lisiku1.com/", title: "img", postEncoding: .gb_18030_2000, imgTag: "img", imgAttr: "src", imgPrefix: "https://www.lisiku1.com/"),
     Website(name: "丽丝库-头条女神Goddes", url: "https://www.lisiku1.com/forum-142-%@.html", listEncoding: .gb_18030_2000, startWith: "thread", prefix: "https://www.lisiku1.com/", title: "img", postEncoding: .gb_18030_2000, imgTag: "img", imgAttr: "src", imgPrefix: "https://www.lisiku1.com/"),
-    
+
     Website(name: "秀人网", url: "http://www.xiuren.org/category/XiuRen-%@.html", listEncoding: .utf8, startWith: "http://www.xiuren.org/XiuRen", prefix: "", title: "title", postEncoding: .utf8, imgTag: "a", imgAttr: "href", imgPrefix: ""),
     Website(name: "尤果网", url: "http://www.xiuren.org/category/ugirls-%@.html", listEncoding: .utf8, startWith: "http://www.xiuren.org/ugirls", prefix: "", title: "title", postEncoding: .utf8, imgTag: "a", imgAttr: "href", imgPrefix: ""),
     Website(name: "推女郎", url: "http://www.xiuren.org/category/TuiGirl-%@.html", listEncoding: .utf8, startWith: "http://www.xiuren.org/tuigirl", prefix: "", title: "title", postEncoding: .utf8, imgTag: "a", imgAttr: "href", imgPrefix: "")

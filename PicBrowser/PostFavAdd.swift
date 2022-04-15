@@ -23,16 +23,13 @@ struct PostFavAddView: View {
                     Text(w.name)
                 }
             }
-//            Picker("Please choose website", selection: $s) {
-//                ForEach(1..<10) {
-//                    Text("\($0) people")
-//                }
-//            }
+            
             HStack {
                 Text("Title")
                     .frame(width: 40, alignment: .leading)
                 TextField("Post title", text: $title)
             }
+            
             HStack {
                 Text("Url")
                     .frame(width: 40, alignment: .leading)

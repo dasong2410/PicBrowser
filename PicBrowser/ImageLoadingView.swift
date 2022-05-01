@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ImageLoadingView: View {
+    @EnvironmentObject var homeData: HomeViewModel
     @StateObject var imageLoader: ImageLoader
 //    @ObservedObject var imageLoader: ImageLoader
     var url: String
@@ -53,9 +54,11 @@ struct ImageLoadingView: View {
         .onAppear() {
             print("ImageLoadingView appear: \(url)")
 //            imageLoader.fetch()
+//            homeData.imageScale = 1
         }
         .onDisappear() {
             print("ImageLoadingView disappear: \(url)")
+//            homeData.imageScale = 1
         }
     }
 }

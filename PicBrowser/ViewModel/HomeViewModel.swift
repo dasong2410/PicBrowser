@@ -24,41 +24,53 @@ class HomeViewModel: ObservableObject {
     @Published var selectedImageID: String = ""
     
     @Published var imageViewerOffset: CGSize = .zero
+    @Published var dragOffsetAcc: CGSize = .zero
     
     @Published var bgOpacity: Double = 1
     @Published var imageScale: CGFloat = 1
+    @Published var lastScaleValue: CGFloat = 1
     
     @Published var showSheet = false
     @Published var hideStatusBar = false
+    @Published var swipe = true
     
     func onChange(value: CGSize) {
-        imageViewerOffset = value
+//        imageViewerOffset = value
+        
+        imageViewerOffset = CGSize(width: value.width + dragOffsetAcc.width, height: value.height + dragOffsetAcc.height)
         
         let halHeight = UIScreen.main.bounds.height / 2
         let progress = imageViewerOffset.height / halHeight
         
-        withAnimation(.default) {
-            bgOpacity = Double(1 - (progress < 0 ? -progress : progress))
+        if imageScale == 1 {
+            withAnimation(.default) {
+                bgOpacity = Double(1 - (progress < 0 ? -progress : progress))
+            }
         }
     }
     
     func onEnd(value: DragGesture.Value) {
         withAnimation(.easeOut) {
-            var translation = value.translation.height
-            
-            if translation < 0 {
-                translation = -translation
-            }
-            
-            if translation < 80 {
-                imageViewerOffset = .zero
-                bgOpacity = 1
-            } else {
-                showImageViewer.toggle()
-                imageViewerOffset = .zero
-                bgOpacity = 1
+            if imageScale == 1 {
+                var translation = value.translation.height
                 
-                hideStatusBar.toggle()
+                if translation < 0 {
+                    translation = -translation
+                }
+                
+                if translation < 80 {
+                    imageViewerOffset = .zero
+                    bgOpacity = 1
+                } else {
+                    showImageViewer.toggle()
+                    imageViewerOffset = .zero
+                    bgOpacity = 1
+                    
+                    hideStatusBar.toggle()
+                }
+            } else {
+                dragOffsetAcc = imageViewerOffset
+                print("Offset: \(imageViewerOffset)")
             }
         }
     }

@@ -9,83 +9,131 @@ import SwiftUI
 
 struct ImageView: View {
     @EnvironmentObject var homeData: HomeViewModel
-    //    @GestureState var draggingOffset: CGSize = .zero
     @State var draggingOffset: CGSize = .zero
-    
-    //    var imgs: [String] = [
-    //        "https://s3.xoimg.com/i/2022/04/02/1zocfy.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zof8g.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zok9t.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zoist.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zol7u.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zoh33.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zoonc.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zoq4r.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zp5sv.jpg",
-    //        "https://s3.xoimg.com/i/2022/04/02/1zskw8.jpg"
-    //    ]
+    @GestureState var press = false
     
     var body: some View {
-        ZStack {
+        GeometryReader { proxy in
+            //        ZStack {
             ScrollView(.init()) {
                 TabView(selection: $homeData.selectedImageID) {
                     ForEach(homeData.allImages, id: \.self) { image in
                         LazyVStack {
                             ImageLoadingView(url: image)
                                 .aspectRatio(contentMode: .fit)
-                                .cornerRadius(18)
+//                                .cornerRadius(18)
                                 .padding(.horizontal, 1)
                                 .tag(image)
                                 .scaleEffect(homeData.selectedImageID == image ? (homeData.imageScale > 1 ? homeData.imageScale : 1) : 1)
-                                .offset(y: homeData.imageViewerOffset.height)
+                            //                                .offset(y: homeData.imageViewerOffset.height)
+                                .offset(homeData.imageViewerOffset)
+//                                .position(x: 0, y: 0)
                                 .gesture(
                                     MagnificationGesture()
                                         .onChanged({(value) in
-                                            homeData.imageScale = value
-                                        }).onEnded({(_) in
+//                                            homeData.imageScale = value<1 ? 1 : value
+//                                            print("Image scale: \(homeData.imageScale)")
+//                                            
+                                            
+                                            let delta = value / homeData.lastScaleValue
+                                            homeData.lastScaleValue = value
+                                            homeData.imageScale = homeData.imageScale * delta
+                                            if homeData.imageScale<1 {
+                                                homeData.imageScale = 1
+                                            }
+                                        }).onEnded({ value in
                                             withAnimation(.spring()){
-//                                                homeData.imageScale = 1
+                                                homeData.lastScaleValue = 1
+                                                
+                                                if homeData.imageScale == 1 {
+                                                    homeData.imageViewerOffset = .zero
+                                                    homeData.dragOffsetAcc = .zero
+                                                    homeData.bgOpacity = 1
+                                                }
                                             }
                                         })
                                         .simultaneously(with: TapGesture(count: 2).onEnded({
                                             withAnimation{
-                                                homeData.imageScale = homeData.imageScale > 1 ? 1 : 4
+                                                homeData.imageScale = homeData.imageScale > 1 ? 1 : 3
+                                                homeData.imageViewerOffset = .zero
+                                                homeData.dragOffsetAcc = .zero
+                                                homeData.bgOpacity = 1
                                             }
                                         }))
+                                    // has to be here, or can not disable tabview swipe when image is scaled
+                                        .simultaneously(with: homeData.imageScale==1 ? nil :  DragGesture()
+                                            .onChanged({ value in
+                                                draggingOffset = value.translation
+                                                homeData.onChange(value: draggingOffset)
+                                            })
+                                                .onEnded(homeData.onEnd(value:)))
                                 )
+                            
+                                .onLongPressGesture {
+                                    homeData.showSheet.toggle()
+                                }
+                            //                                .transition(.move(edge: .bottom))
                         }
+                        .border(Color.red)
                     }
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-                .overlay(
-                    Button {
-                        withAnimation(.default) {
-                            homeData.showSheet.toggle()
-                        }
-                    } label: {
-                        Image(systemName: "square.and.arrow.up")
-                            .foregroundColor(.blue)
-                            .padding()
-                    }
-                        .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
-                        .opacity(homeData.bgOpacity)
-                    , alignment: .topTrailing
-                )
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                //                .overlay(
+                //                    Button {
+                //                        withAnimation(.default) {
+                //                            homeData.showSheet.toggle()
+                //                        }
+                //                    } label: {
+                //                        Image(systemName: "square.and.arrow.up")
+                //                            .foregroundColor(.blue)
+                //                            .padding()
+                //                    }
+                //                        .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
+                //                        .opacity(homeData.bgOpacity)
+                //                    , alignment: .topTrailing
+                //                )
             }
             .ignoresSafeArea()
-//            .gesture(DragGesture().onChanged({ value in
-//                draggingOffset = value.translation
-//                homeData.onChange(value: draggingOffset)
-//            }).onEnded(homeData.onEnd(value:)))
+            .border(Color.green)
 //            .transition(.move(edge: .bottom))
-//            .transition(.scale)
+            .gesture(DragGesture()
+                .onChanged({ value in
+                    var xx = proxy.frame(in: .local)
+                    print("Min x: \(xx.minX)")
+                    print("Max x: \(xx.maxX)")
+                    print("Min y: \(xx.minY)")
+                    print("Max x: \(xx.maxY)")
+                    
+                    xx = proxy.frame(in: .global)
+                    print("Min x: \(xx.minX)")
+                    print("Max x: \(xx.maxX)")
+                    print("Min y: \(xx.minY)")
+                    print("Max x: \(xx.maxY)")
+                    
+                    draggingOffset = value.translation
+                    homeData.onChange(value: draggingOffset)
+                })
+                    .onEnded(homeData.onEnd(value:)))
+            
+            
+            //            .gesture(DragGesture().onChanged({ value in
+            //                draggingOffset = value.translation
+            //                homeData.onChange(value: draggingOffset)
+            //            }).onEnded(homeData.onEnd(value:)))
+            //            .transition(.move(edge: .bottom))
+            //            .transition(.scale)
+            //        }
+            //        .gesture(
+            //            DragGesture()
+            //                .onChanged({ value in
+            //                    draggingOffset = value.translation
+            //                    homeData.onChange(value: draggingOffset)
+            //                })
+            //                .onEnded(homeData.onEnd(value:)))
+            //        .transition(.move(edge: .bottom))
+            //        .transition(.scale)
         }
-        .gesture(DragGesture().onChanged({ value in
-            draggingOffset = value.translation
-            homeData.onChange(value: draggingOffset)
-        }).onEnded(homeData.onEnd(value:)))
         .transition(.move(edge: .bottom))
-//        .transition(.scale)
     }
 }
 

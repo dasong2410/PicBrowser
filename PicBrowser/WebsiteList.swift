@@ -59,6 +59,7 @@ struct WebsiteList: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

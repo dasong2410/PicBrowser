@@ -10,7 +10,7 @@ import SwiftSoup
 
 struct ContentView: View {
     @StateObject var homeData = HomeViewModel()
-
+    
 //    init() {
 //        UIScrollView.appearance().bounces = false
 //    }

@@ -9,19 +9,20 @@ import SwiftUI
 
 class HomeViewModel: ObservableObject {
     @Published var allImages: [String] = []
-//    ["https://s3.xoimg.com/i/2022/04/02/1zocfy.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zof8g.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zok9t.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zoist.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zol7u.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zoh33.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zoonc.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zoq4r.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zp5sv.jpg",
-//                                          "https://s3.xoimg.com/i/2022/04/02/1zskw8.jpg"]
+    //    ["https://s3.xoimg.com/i/2022/04/02/1zocfy.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zof8g.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zok9t.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zoist.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zol7u.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zoh33.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zoonc.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zoq4r.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zp5sv.jpg",
+    //                                          "https://s3.xoimg.com/i/2022/04/02/1zskw8.jpg"]
     
     @Published var showImageViewer = false
     @Published var selectedImageID: String = ""
+    @Published var selectedImageSize: CGSize = .zero
     
     @Published var imageViewerOffset: CGSize = .zero
     @Published var dragOffsetAcc: CGSize = .zero
@@ -35,9 +36,8 @@ class HomeViewModel: ObservableObject {
     @Published var swipe = true
     
     func onChange(value: CGSize) {
-//        imageViewerOffset = value
-        
-        imageViewerOffset = CGSize(width: value.width + dragOffsetAcc.width, height: value.height + dragOffsetAcc.height)
+        var w = value.width + dragOffsetAcc.width
+        var h = value.height + dragOffsetAcc.height
         
         let halHeight = UIScreen.main.bounds.height / 2
         let progress = imageViewerOffset.height / halHeight
@@ -46,7 +46,18 @@ class HomeViewModel: ObservableObject {
             withAnimation(.default) {
                 bgOpacity = Double(1 - (progress < 0 ? -progress : progress))
             }
+        } else {
+            let scaleRatio = imageScale-1>0 ? imageScale-1 : 0
+            var dragWidth = (scaleRatio*selectedImageSize.width - (UIScreen.main.bounds.width - selectedImageSize.width))/2
+            dragWidth = dragWidth>0 ? dragWidth : 0
+            w = abs(w)>dragWidth ? (w>0 ? dragWidth : -dragWidth) : w
+            
+            var dragHeight = (scaleRatio*selectedImageSize.height - (UIScreen.main.bounds.height - selectedImageSize.height))/2
+            dragHeight = dragHeight>0 ? dragHeight : 0
+            h = abs(h)>dragHeight ? (h>0 ? dragHeight : -dragHeight) : h
         }
+        
+        imageViewerOffset = CGSize(width: w, height: h)
     }
     
     func onEnd(value: DragGesture.Value) {
@@ -60,10 +71,12 @@ class HomeViewModel: ObservableObject {
                 
                 if translation < 80 {
                     imageViewerOffset = .zero
+                    dragOffsetAcc = .zero
                     bgOpacity = 1
                 } else {
                     showImageViewer.toggle()
                     imageViewerOffset = .zero
+                    dragOffsetAcc = .zero
                     bgOpacity = 1
                     
                     hideStatusBar.toggle()
@@ -72,6 +85,14 @@ class HomeViewModel: ObservableObject {
                 dragOffsetAcc = imageViewerOffset
                 print("Offset: \(imageViewerOffset)")
             }
+        }
+    }
+    
+    func reset() {
+        withAnimation(.easeOut) {
+            imageViewerOffset = .zero
+            dragOffsetAcc = .zero
+            bgOpacity = 1
         }
     }
 }

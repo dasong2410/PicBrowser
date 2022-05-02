@@ -19,6 +19,7 @@ struct ImageLoadingView: View {
 //    }
 //    var w: CGFloat?
 //    var h: CGFloat?
+    @State var size: CGSize = .zero
     
     init(url: String?/*, w: CGFloat?, h: CGFloat?*/) {
         self._imageLoader = StateObject(wrappedValue: ImageLoader(url: url))
@@ -52,13 +53,15 @@ struct ImageLoadingView: View {
 //        .frame(width: w, height: h)
         /* sometimes onAppear will not be called, not sure if it is a bug */
         .onAppear() {
-            print("ImageLoadingView appear: \(url)")
+//            print("ImageLoadingView appear: \(url)")
 //            imageLoader.fetch()
 //            homeData.imageScale = 1
+//            homeData.reset()
         }
         .onDisappear() {
-            print("ImageLoadingView disappear: \(url)")
+//            print("ImageLoadingView disappear: \(url)")
 //            homeData.imageScale = 1
+            homeData.reset()
         }
     }
 }

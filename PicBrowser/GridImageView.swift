@@ -13,7 +13,7 @@ struct GridImageView: View {
     
     var body: some View {
         Button {
-//            withAnimation(.default) {
+//            withAnimation(.easeIn) {
 //                homeData.selectedImageID = url
 //                homeData.showImageViewer.toggle()
 //                homeData.hideStatusBar.toggle()

@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import SwiftSoup
 
+// https://stackoverflow.com/questions/57594159/swiftui-navigationlink-loads-destination-view-immediately-without-clicking
 struct NavigationLazyView<Content: View>: View {
     let build: () -> Content
     init(_ build: @autoclosure @escaping () -> Content) {
@@ -19,7 +19,6 @@ struct NavigationLazyView<Content: View>: View {
 }
 
 struct WebsiteList: View {
-    
     var body: some View {
         NavigationView{
             List{
@@ -33,31 +32,31 @@ struct WebsiteList: View {
                     NavigationLink(destination: NavigationLazyView(PostListView(website: w))) {
                         Text(w.name)
                     }
-                    .swipeActions(allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            print("Deleting website configuration")
-                        } label: {
-                            Label("Delete", systemImage: "trash.fill")
-                        }
-                    }
-                    .swipeActions(allowsFullSwipe: false) {
-                        Button {
-                            print("Modifying website configuration")
-                        } label: {
-                            Label("Modify", systemImage: "pencil")
-                        }
-                    }
+//                    .swipeActions(allowsFullSwipe: false) {
+//                        Button(role: .destructive) {
+//                            print("Deleting website configuration")
+//                        } label: {
+//                            Label("Delete", systemImage: "trash.fill")
+//                        }
+//                    }
+//                    .swipeActions(allowsFullSwipe: false) {
+//                        Button {
+//                            print("Modifying website configuration")
+//                        } label: {
+//                            Label("Modify", systemImage: "pencil")
+//                        }
+//                    }
                 }
             }
             .navigationTitle("Websites")
 //            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                Button {
-                    
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
+//            .toolbar {
+//                Button {
+//
+//                } label: {
+//                    Image(systemName: "plus")
+//                }
+//            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

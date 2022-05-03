@@ -46,6 +46,8 @@ class HomeViewModel: ObservableObject {
             withAnimation(.default) {
                 bgOpacity = Double(1 - (progress < 0 ? -progress : progress))
             }
+            
+            w = imageViewerOffset.width
         } else {
             let scaleRatio = imageScale-1>0 ? imageScale-1 : 0
             var dragWidth = (scaleRatio*selectedImageSize.width - (UIScreen.main.bounds.width - selectedImageSize.width))/2

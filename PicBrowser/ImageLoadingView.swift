@@ -61,7 +61,7 @@ struct ImageLoadingView: View {
         .onDisappear() {
 //            print("ImageLoadingView disappear: \(url)")
 //            homeData.imageScale = 1
-            homeData.reset()
+//            homeData.reset()
         }
     }
 }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ImageView: View {
     @EnvironmentObject var homeData: HomeViewModel
-    //    @State var draggingOffset: CGSize = .zero
     @GestureState var press = false
     @State private var viewSize = CGSize.zero
     
@@ -20,10 +19,9 @@ struct ImageView: View {
                     LazyVStack {
                         ImageLoadingView(url: image)
                             .aspectRatio(contentMode: .fit)
-                            .padding(.horizontal, 1)
+                            .padding(.horizontal, 0.5)
                             .tag(image)
                             .scaleEffect(homeData.selectedImageID == image ? (homeData.imageScale > 1 ? homeData.imageScale : 1) : 1)
-                        //                                .offset(y: homeData.imageViewerOffset.height)
                             .offset(homeData.imageViewerOffset)
                             .gesture(
                                 MagnificationGesture()
@@ -51,10 +49,10 @@ struct ImageView: View {
                                             homeData.dragOffsetAcc = .zero
                                             homeData.bgOpacity = 1
                                             
-                                            print("Image: \(homeData.selectedImageID)")
-                                            print("Image size: \(homeData.selectedImageSize.width) \(homeData.selectedImageSize.height)")
-                                            print("Scale: \(homeData.imageScale)")
-                                            print("Image size(scaled): \(homeData.selectedImageSize.width * homeData.imageScale) \(homeData.selectedImageSize.height * homeData.imageScale)")
+                                            //                                            print("Image: \(homeData.selectedImageID)")
+                                            //                                            print("Image size: \(homeData.selectedImageSize.width) \(homeData.selectedImageSize.height)")
+                                            //                                            print("Scale: \(homeData.imageScale)")
+                                            //                                            print("Image size(scaled): \(homeData.selectedImageSize.width * homeData.imageScale) \(homeData.selectedImageSize.height * homeData.imageScale)")
                                         }
                                     }))
                                 // has to be here, or can not disable tabview swipe when image is scaled

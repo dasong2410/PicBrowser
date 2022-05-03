@@ -12,8 +12,8 @@ struct Favs: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     let persistenceController = PersistenceController.shared
     
-    var website = Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", listEncoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "ess-data", imgPrefix: "")
-    
+//    var website = Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", listEncoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "ess-data", imgPrefix: "")
+
     //        @FetchRequest(
     //            entity: PostsEntity.entity(),
     //            sortDescriptors: []
@@ -31,7 +31,7 @@ struct Favs: View {
                         
                         let website = websites[0]
                         NavigationLink {
-                            PicGallery2(website: website, url: url, title: title)
+                            PicGallery(website: website, url: url, title: title)
                         } label: {
                             Text(title)
                         }

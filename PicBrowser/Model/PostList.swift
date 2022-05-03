@@ -9,7 +9,7 @@ import Foundation
 import SwiftSoup
 
 @MainActor
-class PostList: ObservableObject{
+class PostList: ObservableObject {
     @Published var currPageNo: Int = 1
 //    @Published var posts: [(title: String, src: String)]=[]
     @Published var posts: [PostInfo]=[]
@@ -22,7 +22,6 @@ class PostList: ObservableObject{
     func extractPosts() {
         var idx: Int = 0
         posts.removeAll()
-//        let urlWithPgNo = website.url + "\(currPageNo)"
         let urlWithPgNo = String(format: website.url, String(currPageNo))
         
         if let url = URL(string: urlWithPgNo) {
@@ -59,7 +58,6 @@ class PostList: ObservableObject{
                             }
                             
                             if !posts.contains(where: {$0.url == src}) {
-//                                posts.append((title, src))
                                 posts.append(PostInfo(id: idx, title: title, url: src))
                                 idx += 1
                             }

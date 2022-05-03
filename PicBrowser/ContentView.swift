@@ -27,7 +27,7 @@ struct ContentView: View {
                     Image(systemName: "gear")
                 }
         }
-        /* https://stackoverflow.com/questions/69309689/ios-15-swiftui-tabview-tab-bar-appearance-doesnt-update-between-views */
+        // https://stackoverflow.com/questions/69309689/ios-15-swiftui-tabview-tab-bar-appearance-doesnt-update-between-views
         .onAppear {
             if #available(iOS 15.0, *) {
                 let appearance = UITabBarAppearance()
@@ -42,9 +42,8 @@ struct ContentView: View {
                     Color.black
                         .opacity(homeData.bgOpacity)
                         .ignoresSafeArea()
-
+                    
                     ImageView()
-//                    Text("Selected image id: \(homeData.selectedImageID)")
                 }
             }
                 .ignoresSafeArea()
@@ -60,6 +59,20 @@ struct ContentView: View {
         }
         .statusBar(hidden: homeData.hideStatusBar)
         .environmentObject(homeData)
+    }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        
     }
 }
 

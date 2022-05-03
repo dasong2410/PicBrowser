@@ -52,7 +52,7 @@ struct PostListView: View {
                 List{
                     ForEach(postList.posts, id: \.url){ item in
                         NavigationLink {
-                            PicGallery2(website: website, url: item.url, title: item.title)
+                            PicGallery(website: website, url: item.url, title: item.title)
                         } label: {
                             Text(item.title)
                         }

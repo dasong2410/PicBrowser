@@ -20,7 +20,7 @@ class HomeViewModel: ObservableObject {
     //                                          "https://s3.xoimg.com/i/2022/04/02/1zp5sv.jpg",
     //                                          "https://s3.xoimg.com/i/2022/04/02/1zskw8.jpg"]
     
-    @Published var showImageViewer = false
+    @Published var showImageViewer: Bool = false
     @Published var selectedImageID: String = ""
     @Published var selectedImageSize: CGSize = .zero
     
@@ -31,9 +31,9 @@ class HomeViewModel: ObservableObject {
     @Published var imageScale: CGFloat = 1
     @Published var lastScaleValue: CGFloat = 1
     
-    @Published var showSheet = false
-    @Published var hideStatusBar = false
-    @Published var swipe = true
+    @Published var showSheet: Bool = false
+    @Published var hideStatusBar: Bool = false
+    @Published var swipe: Bool = true
     
     func onChange(value: CGSize) {
         var w = value.width + dragOffsetAcc.width

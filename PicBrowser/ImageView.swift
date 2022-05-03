@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ImageView: View {
     @EnvironmentObject var homeData: HomeViewModel
-    @GestureState var press = false
-    @State private var viewSize = CGSize.zero
+    @GestureState var press: Bool = false
+    @State private var viewSize: CGSize = CGSize.zero
     
     var body: some View {
         ScrollView(.init()) {

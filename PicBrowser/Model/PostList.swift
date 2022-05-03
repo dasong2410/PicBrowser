@@ -11,7 +11,6 @@ import SwiftSoup
 @MainActor
 class PostList: ObservableObject {
     @Published var currPageNo: Int = 1
-//    @Published var posts: [(title: String, src: String)]=[]
     @Published var posts: [PostInfo]=[]
     var website: Website
     
@@ -22,11 +21,11 @@ class PostList: ObservableObject {
     func extractPosts() {
         var idx: Int = 0
         posts.removeAll()
-        let urlWithPgNo = String(format: website.url, String(currPageNo))
+        let urlWithPgNo: String = String(format: website.url, String(currPageNo))
         
         if let url = URL(string: urlWithPgNo) {
             do {
-                let contents = try String(contentsOf: url, encoding: website.listEncoding)
+                let contents: String = try String(contentsOf: url, encoding: website.listEncoding)
                 //                    print(contents)
                 
                 do {

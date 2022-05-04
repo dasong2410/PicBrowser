@@ -1,5 +1,5 @@
 //
-//  PostList.swift
+//  PostListViewModel.swift
 //  PicBrowser
 //
 //  Created by Marcus Mao on 3/28/22.
@@ -9,9 +9,9 @@ import Foundation
 import SwiftSoup
 
 @MainActor
-class PostList: ObservableObject {
+class PostListViewModel: ObservableObject {
     @Published var currPageNo: Int = 1
-    @Published var posts: [PostInfo]=[]
+    @Published var posts: [Post]=[]
     var website: Website
     
     init(website: Website){
@@ -30,19 +30,19 @@ class PostList: ObservableObject {
                 
                 do {
                     let doc: Document = try SwiftSoup.parse(contents)
-                    let postInfo: Elements = try doc.select("a")
-                    for h in postInfo {
+                    let postTags: Elements = try doc.select("a")
+                    for h in postTags {
                         var src = try h.attr("href")
                         if src.starts(with: website.startWith) {
                             src = website.prefix + src
                             
-                            var title: String
+                            var title: String = ""
                             if website.title=="text" {
                                 title = try h.text()
                             } else if website.title=="title" {
                                 title = try h.attr("title")
                             } else if website.title=="img" {
-                                title = ""
+//                                title = ""
                                 let imgs = try h.getElementsByTag("img")
                                 if imgs.count>0 {
                                     title = try imgs.attr("title")
@@ -57,7 +57,7 @@ class PostList: ObservableObject {
                             }
                             
                             if !posts.contains(where: {$0.url == src}) {
-                                posts.append(PostInfo(id: idx, title: title, url: src))
+                                posts.append(Post(id: idx, title: title, url: src))
                                 idx += 1
                             }
                             

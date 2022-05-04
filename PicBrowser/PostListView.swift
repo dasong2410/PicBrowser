@@ -11,13 +11,13 @@ import CoreData
 
 struct PostListView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @ObservedObject private var postList: PostList
+    @ObservedObject private var postListViewModel: PostListViewModel
     var website: Website
     
     init(website: Website){
         self.website = website
-        self.postList = PostList(website: self.website)
-        self.postList.extractPosts()
+        self.postListViewModel = PostListViewModel(website: self.website)
+        self.postListViewModel.extractPosts()
     }
     
     var body: some View {
@@ -25,9 +25,9 @@ struct PostListView: View {
             ScrollViewReader{ proxy in
                 HStack{
                     Button {
-                        if postList.currPageNo>1{
-                            postList.currPageNo -= 1
-                            postList.extractPosts()
+                        if postListViewModel.currPageNo>1{
+                            postListViewModel.currPageNo -= 1
+                            postListViewModel.extractPosts()
                             proxy.scrollTo(0, anchor: .bottom)
                         }
                     } label: {
@@ -36,12 +36,12 @@ struct PostListView: View {
                     .buttonStyle(.bordered)
                     
                     Spacer()
-                    Text("Page: \(postList.currPageNo)")
+                    Text("Page: \(postListViewModel.currPageNo)")
                     Spacer()
                     
                     Button {
-                        postList.currPageNo += 1
-                        postList.extractPosts()
+                        postListViewModel.currPageNo += 1
+                        postListViewModel.extractPosts()
                         proxy.scrollTo(0, anchor: .bottom)
                     } label: {
                         Image(systemName: "arrow.right")
@@ -50,7 +50,7 @@ struct PostListView: View {
                 }.padding(5)
                 
                 List{
-                    ForEach(postList.posts, id: \.url){ item in
+                    ForEach(postListViewModel.posts, id: \.url){ item in
                         NavigationLink {
                             PicGallery(website: website, url: item.url, title: item.title)
                         } label: {
@@ -63,7 +63,7 @@ struct PostListView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .refreshable {
                     print("Refresh list")
-                    self.postList.extractPosts()
+                    self.postListViewModel.extractPosts()
                 }
             }
         }

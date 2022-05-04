@@ -11,24 +11,18 @@ extension String.Encoding {
     static let gb_18030_2000 = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(CFStringEncodings.GB_18030_2000.rawValue)))
 }
 
-struct PostInfo{
-    var id: Int
-    var title: String
-    var url: String
-}
-
 struct Website: Hashable {
-    var name: String
-    var url: String
-    var listEncoding: String.Encoding
-    var startWith: String
-    var prefix: String
-    var title: String
+    var name: String // website name
+    var url: String // website url
+    var listEncoding: String.Encoding // website charset encoding
+    var startWith: String // post link <a href=...> value may not be complete, need to fill in
+    var prefix: String // filter <a href=...> that don't need
+    var title: String // tag or attr, from which extracting title value(text, title, img)
     
-    var postEncoding: String.Encoding
-    var imgTag: String
-    var imgAttr: String
-    var imgPrefix: String
+    var postEncoding: String.Encoding // post page charset encoding, some websites may have multiple charset
+    var imgTag: String // img tag, from which extracting image(img, a)
+    var imgAttr: String // img tag attr, from which extracting image url
+    var imgPrefix: String // some images url may not complete, need to fill in
 }
 
 let websiteList: [Website] = [

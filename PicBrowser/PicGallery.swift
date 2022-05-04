@@ -11,21 +11,14 @@ import CoreData
 
 struct PicGallery: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    let persistenceController = PersistenceController.shared
-    
     @EnvironmentObject var homeData: HomeViewModel
+    @State var isLiked: Bool = false
     
-    // Will exit unexpectly when come from favs
-    //    @FetchRequest(
-    //        entity: PostsEntity.entity(),
-    //        sortDescriptors: []
-    //    ) var favPosts: FetchedResults<PostsEntity>
+    let persistenceController = PersistenceController.shared
     
     var website: Website
     var url: String
     var title: String
-    
-    @State var isLiked: Bool = false
     
     init(website: Website, url: String, title: String) {
         self.website = website
@@ -59,16 +52,10 @@ struct PicGallery: View {
             Button{
                 if isLiked {
                     do {
-                        // Create a fetch request with a string filter
-                        // for an entity’s name
                         let fetchRequest: NSFetchRequest<PostsEntity> = PostsEntity.fetchRequest()
-                        
                         fetchRequest.predicate = NSPredicate(
                             format: "url LIKE %@", url
                         )
-                        
-                        // Perform the fetch request to get the objects
-                        // matching the predicate
                         let objects = try managedObjectContext.fetch(fetchRequest)
                         let cnt = objects.count
                         for i in (0..<cnt) {
@@ -104,9 +91,11 @@ struct PicGallery: View {
         .onAppear() {
             print("Cache size: \(URLCache.shared.memoryCapacity/1024)KB")
             
-            let pics = extractPicSrcs(website: website, url: url)
-            homeData.allImages.removeAll()
-            homeData.allImages.append(contentsOf: pics)
+//            let pics = homeData.extractImages(website: website, url: url)
+//            homeData.allImages.removeAll()
+//            homeData.allImages.append(contentsOf: pics)
+            
+            homeData.extractImages(website: website, url: url)
             print("Image cnt: \(homeData.allImages.count)")
             
             do {
@@ -130,58 +119,9 @@ struct PicGallery: View {
     }
 }
 
-func extractPicSrcs(website: Website, url: String) -> [String]{
-    var imgArray: [String] = []
-    
-    if let url = URL(string: url) {
-        do {
-            let contents = try String(contentsOf: url, encoding: website.postEncoding)
-//            print(contents)
-            
-            do {
-                let doc: Document = try SwiftSoup.parse(contents)
-                //                let imgs: Elements = try doc.select("img")
-                let imgs: Elements = try doc.select(website.imgTag)
-                for img in imgs {
-                    print("Tag info: \(img)")
-                    
-                    var src = try img.attr(website.imgAttr)
-                    let txt = try img.text()
-                    
-                    if src.isEmpty || !txt.isEmpty {
-                        continue
-                    } else {
-                        src = website.imgPrefix + src
-                    }
-                    
-                    print("Image src: \(src)")
-                    imgArray.append(src)
-                }
-                
-                return imgArray
-            } catch Exception.Error(_, let message) {
-                print(message)
-            } catch {
-                print(error)
-            }
-            
-            return imgArray
-        } catch {
-            // contents could not be loaded
-            print(error)
-        }
-    } else {
-        // the URL was bad!
-        
-    }
-    
-    return imgArray
-}
-
 struct PicGallry2_Previews: PreviewProvider {
     static var previews: some View {
-        var website = Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", listEncoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "ess-data", imgPrefix: "")
-        //        PicGallery2()
+//        var website = Website(name: "草榴-新时代的我们", url: "https://www.t66y.com/thread0806.php?fid=8&search=&page=", listEncoding: .utf8, startWith: "htm_data/", prefix: "https://www.t66y.com/", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "ess-data", imgPrefix: "")
         ContentView()
     }
 }

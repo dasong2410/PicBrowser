@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftSoup
 
 class HomeViewModel: ObservableObject {
     @Published var allImages: [String] = []
@@ -33,7 +34,6 @@ class HomeViewModel: ObservableObject {
     
     @Published var showSheet: Bool = false
     @Published var hideStatusBar: Bool = false
-    @Published var swipe: Bool = true
     
     func onChange(value: CGSize) {
         var w = value.width + dragOffsetAcc.width
@@ -47,9 +47,11 @@ class HomeViewModel: ObservableObject {
                 bgOpacity = Double(1 - (progress < 0 ? -progress : progress))
             }
             
+            // when scale=1, don't change x-axis value
             w = imageViewerOffset.width
         } else {
             let scaleRatio = imageScale-1>0 ? imageScale-1 : 0
+            
             var dragWidth = (scaleRatio*selectedImageSize.width - (UIScreen.main.bounds.width - selectedImageSize.width))/2
             dragWidth = dragWidth>0 ? dragWidth : 0
             w = abs(w)>dragWidth ? (w>0 ? dragWidth : -dragWidth) : w
@@ -77,6 +79,7 @@ class HomeViewModel: ObservableObject {
                     bgOpacity = 1
                 } else {
                     showImageViewer.toggle()
+                    
                     imageViewerOffset = .zero
                     dragOffsetAcc = .zero
                     bgOpacity = 1
@@ -90,11 +93,44 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func reset() {
-        withAnimation(.easeOut) {
-            imageViewerOffset = .zero
-            dragOffsetAcc = .zero
-            bgOpacity = 1
+    func extractImages(website: Website, url: String) {
+        allImages.removeAll()
+        
+        if let url = URL(string: url) {
+            do {
+                let contents = try String(contentsOf: url, encoding: website.postEncoding)
+    //            print(contents)
+                
+                do {
+                    let doc: Document = try SwiftSoup.parse(contents)
+                    let imgTags: Elements = try doc.select(website.imgTag)
+                    for img in imgTags {
+                        print("Tag info: \(img)")
+                        
+                        var src = try img.attr(website.imgAttr)
+                        let txt = try img.text()
+                        
+                        if src.isEmpty || !txt.isEmpty {
+                            continue
+                        } else {
+                            src = website.imgPrefix + src
+                        }
+                        
+                        print("Image src: \(src)")
+                        allImages.append(src)
+                    }
+                } catch Exception.Error(_, let message) {
+                    print(message)
+                } catch {
+                    print(error)
+                }
+            } catch {
+                // contents could not be loaded
+                print(error)
+            }
+        } else {
+            // the URL was bad!
+            print("The URL was bad!")
         }
     }
 }

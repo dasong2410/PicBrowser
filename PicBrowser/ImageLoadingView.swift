@@ -55,13 +55,9 @@ struct ImageLoadingView: View {
         .onAppear() {
 //            print("ImageLoadingView appear: \(url)")
 //            imageLoader.fetch()
-//            homeData.imageScale = 1
-//            homeData.reset()
         }
         .onDisappear() {
 //            print("ImageLoadingView disappear: \(url)")
-//            homeData.imageScale = 1
-//            homeData.reset()
         }
     }
 }

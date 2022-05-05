@@ -8,14 +8,43 @@ If you like it, please feel free to do whatever you want with this app.
 
 ## Screenshots
 
-![Image](Screenshots/s1.jpg)
-![Image](Screenshots/s2.jpg)
-![Image](Screenshots/s3.jpg)
-![Image](Screenshots/s4.jpg)
-![Image](Screenshots/s5.jpg)
-![Image](Screenshots/s6.jpg)
-![Image](Screenshots/s7.jpg)
-![Image](Screenshots/s8.jpg)
-![Image](Screenshots/s9.jpg)
-![Image](Screenshots/s10.jpg)
-![Image](Screenshots/s11.jpg)
+- Website list
+
+  ![Image](Screenshots/s1.jpg)
+
+
+- Post list
+
+  ![Image](Screenshots/s2.jpg)
+
+- Image gallery
+
+  ![Image](Screenshots/s3.jpg)
+
+- Image viewer
+
+  ![Image](Screenshots/s4.jpg)
+
+- Image viewer scale
+
+  ![Image](Screenshots/s5.jpg)
+
+- Image viewer close
+
+  ![Image](Screenshots/s6.jpg)
+
+- Image viewer swipe
+
+  ![Image](Screenshots/s7.jpg)
+
+- Settings
+
+  ![Image](Screenshots/s8.jpg)
+
+- Favorites
+
+  ![Image](Screenshots/s9.jpg)
+
+- Favorites image gallery
+
+  ![Image](Screenshots/s10.jpg)

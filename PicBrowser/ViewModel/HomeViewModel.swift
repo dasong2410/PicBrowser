@@ -117,7 +117,14 @@ class HomeViewModel: ObservableObject {
                         }
                         
                         print("Image src: \(src)")
-                        allImages.append(src)
+                        if !allImages.contains(where: { tagSrc in
+                            src == tagSrc
+                        }) {
+                            // some image url may contain Chinese chars
+                            allImages.append(src.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? src)
+                        } else {
+                            print("Image \(src) is already extracted.")
+                        }
                     }
                 } catch Exception.Error(_, let message) {
                     print(message)

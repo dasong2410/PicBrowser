@@ -32,6 +32,19 @@
 		2CE240DD27D037EB0078395D /* WebsiteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE240DC27D037EB0078395D /* WebsiteList.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2CAA04322826152100B7F206 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2C05553827F7F35E004AE5CF /* PicBrowserRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PicBrowserRelease.entitlements; sourceTree = "<group>"; };
 		2C11568C27CDD3D200704CFC /* PicBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PicBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +66,12 @@
 		2CA8B99328022ADA005C5726 /* GridImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridImageView.swift; sourceTree = "<group>"; };
 		2CA8B99628022B26005C5726 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		2CA8B99828022FAA005C5726 /* PicGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicGallery.swift; sourceTree = "<group>"; };
+		2CAA04292826152100B7F206 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		2CAA042C2826152100B7F206 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		2CAA042E2826152100B7F206 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2CAA043C2826165500B7F206 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		2CAA043F2826165500B7F206 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		2CAA04412826165500B7F206 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CC9FC832822ED3700E2AFF9 /* PostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListViewModel.swift; sourceTree = "<group>"; };
 		2CE240D727CF2EB00078395D /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
 		2CE240DA27D01D940078395D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -75,6 +94,8 @@
 			isa = PBXGroup;
 			children = (
 				2C11568E27CDD3D200704CFC /* PicBrowser */,
+				2CAA04282826152100B7F206 /* ShareImages */,
+				2CAA043B2826165500B7F206 /* ShareImages */,
 				2C11568D27CDD3D200704CFC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -139,6 +160,26 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		2CAA04282826152100B7F206 /* ShareImages */ = {
+			isa = PBXGroup;
+			children = (
+				2CAA04292826152100B7F206 /* ShareViewController.swift */,
+				2CAA042B2826152100B7F206 /* MainInterface.storyboard */,
+				2CAA042E2826152100B7F206 /* Info.plist */,
+			);
+			path = ShareImages;
+			sourceTree = "<group>";
+		};
+		2CAA043B2826165500B7F206 /* ShareImages */ = {
+			isa = PBXGroup;
+			children = (
+				2CAA043C2826165500B7F206 /* ShareViewController.swift */,
+				2CAA043E2826165500B7F206 /* MainInterface.storyboard */,
+				2CAA04412826165500B7F206 /* Info.plist */,
+			);
+			path = ShareImages;
+			sourceTree = "<group>";
+		};
 		2CE240D927D01CF00078395D /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +208,7 @@
 				2C11568827CDD3D200704CFC /* Sources */,
 				2C11568927CDD3D200704CFC /* Frameworks */,
 				2C11568A27CDD3D200704CFC /* Resources */,
+				2CAA04322826152100B7F206 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -187,7 +229,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1320;
+				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					2C11568B27CDD3D200704CFC = {
@@ -257,6 +299,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2CAA042B2826152100B7F206 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2CAA042C2826152100B7F206 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		2CAA043E2826165500B7F206 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2CAA043F2826165500B7F206 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2C11569827CDD3D400704CFC /* Debug */ = {
@@ -378,6 +439,7 @@
 		2C11569B27CDD3D400704CFC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -411,6 +473,7 @@
 		2C11569C27CDD3D400704CFC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PicBrowser/PicBrowserRelease.entitlements;

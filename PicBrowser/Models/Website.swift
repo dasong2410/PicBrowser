@@ -45,5 +45,7 @@ let websiteList: [Website] = [
     Website(name: "推女郎", url: "http://www.xiuren.org/category/TuiGirl-%@.html", listEncoding: .utf8, startWith: "http://www.xiuren.org/tuigirl", prefix: "", title: "title", postEncoding: .utf8, imgTag: "a", imgAttr: "href", imgPrefix: ""),
     
     Website(name: "ons.ooo-性感美女", url: "https://ons.ooo/type/1/?page=%@", listEncoding: .utf8, startWith: "/article/", prefix: "https://ons.ooo", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "data-original", imgPrefix: ""),
-    Website(name: "ons.ooo-制服丝袜", url: "https://ons.ooo/type/2/?page=%@", listEncoding: .utf8, startWith: "/article/", prefix: "https://ons.ooo", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "data-original", imgPrefix: "")
+    Website(name: "ons.ooo-制服丝袜", url: "https://ons.ooo/type/2/?page=%@", listEncoding: .utf8, startWith: "/article/", prefix: "https://ons.ooo", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "data-original", imgPrefix: ""),
+    
+    Website(name: "看妹妹", url: "https://mm.tvv.tw/page/%@/", listEncoding: .utf8, startWith: "https://mm.tvv.tw/archives/", prefix: "", title: "text", postEncoding: .utf8, imgTag: "img", imgAttr: "src", imgPrefix: "")
 ]
